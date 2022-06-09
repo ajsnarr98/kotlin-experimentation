@@ -21,3 +21,19 @@ sourceSets {
         }
     }
 }
+
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "com.github.ajsnarr98.ktexperimentation.MainKt"
+        )
+    }
+
+    // To add all of the dependencies
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
